@@ -9,12 +9,11 @@ import org.json.JSONObject;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public class MembersLoader {
 
-    private static final String URL = "https://www.strava.com/api/v3/clubs/%s/members";
+    private static final String URL = "https://www.strava.com/api/v3/clubs/%s/members?per_page=200";
     private static final String AUTH = "Bearer %s";
 
     private final String clubId;
