@@ -1,9 +1,6 @@
 package com.ch.ser.strava;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -32,6 +29,12 @@ public class MileageLoader {
         webDriver.findElement(By.id("email")).sendKeys("serega4@gmail.com");
         webDriver.findElement(By.id("password")).sendKeys("seraria");
         webDriver.findElement(By.id("login-button")).click();
+
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         for (int i = 0; i < athletes.size(); i++) {
             final Athlete athlete = athletes.get(i);
