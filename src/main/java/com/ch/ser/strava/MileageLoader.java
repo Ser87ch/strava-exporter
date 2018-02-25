@@ -26,8 +26,8 @@ public class MileageLoader {
 
         webDriver.get("https://www.strava.com/login");
 
-        webDriver.findElement(By.id("email")).sendKeys("serega4@gmail.com");
-        webDriver.findElement(By.id("password")).sendKeys("seraria");
+        webDriver.findElement(By.id("email")).sendKeys(user);
+        webDriver.findElement(By.id("password")).sendKeys(password);
         webDriver.findElement(By.id("login-button")).click();
 
         try {
