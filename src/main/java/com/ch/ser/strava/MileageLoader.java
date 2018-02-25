@@ -11,6 +11,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public class MileageLoader {
+    private static final int NEW_DRIVER_COUNT = 15;
 
     private final String user;
     private final String password;
@@ -22,6 +23,18 @@ public class MileageLoader {
     }
 
     public void loadMileage(List<Athlete> athletes) {
+        WebDriver webDriver = null;
+        for (int i = 0; i < athletes.size(); i++) {
+            if (i % NEW_DRIVER_COUNT == 0) {
+                webDriver = getWebDriver();
+            }
+            final Athlete athlete = athletes.get(i);
+            athlete.setMileage(loadAthleteMileage(athlete.getId(), webDriver).replace(",", ""));
+            System.out.println(String.format("%d/%d Done", i + 1, athletes.size()));
+        }
+    }
+
+    private WebDriver getWebDriver() {
         final WebDriver webDriver = new HtmlUnitDriver(true);
 
         webDriver.get("https://www.strava.com/login");
@@ -31,16 +44,11 @@ public class MileageLoader {
         webDriver.findElement(By.id("login-button")).click();
 
         try {
-            Thread.sleep(5000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-        for (int i = 0; i < athletes.size(); i++) {
-            final Athlete athlete = athletes.get(i);
-            athlete.setMileage(loadAthleteMileage(athlete.getId(), webDriver).replace(",",""));
-            System.out.println(String.format("%d/%d Done", i + 1, athletes.size()));
-        }
+        return webDriver;
     }
 
     private String loadAthleteMileage(int id, WebDriver webDriver) {
