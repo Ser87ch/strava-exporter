@@ -10,9 +10,13 @@ public class Athlete {
     private String mileage;
 
     public Athlete(JSONObject jsonObject) {
-        this.id = jsonObject.getInt("id");
-        this.firstName = jsonObject.getString("firstname");
-        this.secondName = jsonObject.getString("lastname");
+        this(jsonObject.getInt("id"), jsonObject.getString("firstname"), jsonObject.getString("lastname"));
+    }
+
+    public Athlete(int id, String firstName, String secondName) {
+        this.id = id;
+        this.firstName = firstName;
+        this.secondName = secondName;
     }
 
     @Override
