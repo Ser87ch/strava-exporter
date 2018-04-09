@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class Main {
@@ -12,6 +14,8 @@ public class Main {
             throw new RuntimeException("Should be provided following arguments: email, password, file name");
         }
 
+        Logger.getLogger("com.gargoylesoftware").setLevel(Level.OFF);
+        Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(Level.OFF);
 //        final String publicToken = args.length == 4 ? args[3] : "62ee9e8b017042d482ed933930c6b4b5b58e9280";
         final MembersLoader membersLoader = new MembersCsvLoader(args[2]);
 //        final MembersLoader membersLoader = new MembersApiLoader(args[0], publicToken);

@@ -11,7 +11,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public class MileageLoader {
-    private static final int NEW_DRIVER_COUNT = 15;
+    private static final int NEW_DRIVER_COUNT = 10;
 
     private final String user;
     private final String password;
