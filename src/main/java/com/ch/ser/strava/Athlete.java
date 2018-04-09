@@ -42,6 +42,14 @@ public class Athlete {
         return id;
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getSecondName() {
+        return secondName;
+    }
+
     @Override
     public String toString() {
         return String.format("%s,%s,%s", firstName, secondName, mileage);

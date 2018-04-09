@@ -1,6 +1,9 @@
 package com.ch.ser.strava;
 
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -29,6 +32,7 @@ public class MileageLoader {
                 webDriver = getWebDriver();
             }
             final Athlete athlete = athletes.get(i);
+            System.out.println("Loading " + athlete.getFirstName() + " " + athlete.getSecondName());
             athlete.setMileage(loadAthleteMileage(athlete.getId(), webDriver).replace(",", ""));
             System.out.println(String.format("%d/%d Done", i + 1, athletes.size()));
         }
@@ -36,7 +40,7 @@ public class MileageLoader {
 
     private WebDriver getWebDriver() {
         final WebDriver webDriver = new HtmlUnitDriver(true);
-
+        System.out.println("logging");
         webDriver.get("https://www.strava.com/login");
 
         webDriver.findElement(By.id("email")).sendKeys(user);
@@ -48,6 +52,7 @@ public class MileageLoader {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        System.out.println("logged");
         return webDriver;
     }
 
