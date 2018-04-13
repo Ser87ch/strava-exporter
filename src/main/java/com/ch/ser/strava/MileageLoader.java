@@ -1,9 +1,6 @@
 package com.ch.ser.strava;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -12,6 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class MileageLoader {
     private static final int NEW_DRIVER_COUNT = 10;
@@ -40,6 +38,7 @@ public class MileageLoader {
 
     private WebDriver getWebDriver() {
         final WebDriver webDriver = new HtmlUnitDriver(true);
+        webDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         System.out.println("logging");
         webDriver.get("https://www.strava.com/login");
 
@@ -61,12 +60,19 @@ public class MileageLoader {
 
         new WebDriverWait(webDriver, 10).until((ExpectedCondition<Boolean>) driver ->
                 (Boolean) ((JavascriptExecutor) driver).executeScript("return (window.jQuery != null) && (jQuery.active === 0);"));
+
         try {
-            Files.write(Paths.get("./logged.html"), webDriver.getPageSource().getBytes());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            final WebElement element = webDriver.findElement(By.xpath("//tbody[@id = 'running-ytd']//tr[1]//td[2]"));
+            return element.getAttribute("innerHTML");
+        } catch (NoSuchElementException e) {
+            try {
+                final byte[] pageSourceBytes = webDriver.getPageSource().getBytes();
+                final String fileName = "user" + id + ".html";
+                Files.write(Paths.get(fileName), pageSourceBytes);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            return "Mileage not found";
         }
-        final WebElement element = webDriver.findElement(By.xpath("//tbody[@id = 'running-ytd']//tr[1]//td[2]"));
-        return element.getAttribute("innerHTML");
     }
 }
