@@ -47,7 +47,7 @@ public class MileageLoader {
         webDriver.findElement(By.id("login-button")).click();
 
         try {
-            Thread.sleep(2000);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
