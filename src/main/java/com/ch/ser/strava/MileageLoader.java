@@ -38,7 +38,7 @@ public class MileageLoader {
     }
 
     private WebDriver getWebDriver() {
-        final WebDriver webDriver = new HtmlUnitDriver(true);
+        final WebDriver webDriver = new MyDriver();
         webDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         System.out.println("logging");
         webDriver.get("https://www.strava.com/login");
