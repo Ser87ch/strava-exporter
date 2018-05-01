@@ -12,21 +12,22 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class MileageLoader {
-    private static final int NEW_DRIVER_COUNT = 10;
 
     private final String user;
     private final String password;
+    private final int batchSize;
 
 
-    public MileageLoader(String user, String password) {
+    public MileageLoader(String user, String password, String batchStr) {
         this.user = user;
         this.password = password;
+        this.batchSize = Integer.parseInt(batchStr);
     }
 
     public void loadMileage(List<Athlete> athletes) {
         WebDriver webDriver = null;
         for (int i = 0; i < athletes.size(); i++) {
-            if (i % NEW_DRIVER_COUNT == 0) {
+            if (i % batchSize == 0) {
                 webDriver = getWebDriver();
             }
             final Athlete athlete = athletes.get(i);

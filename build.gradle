@@ -9,6 +9,13 @@ repositories {
     mavenCentral()
 }
 
+ext {
+    user = project.hasProperty('user') ? project.property('user') : 'default_user'
+    password = project.hasProperty('password') ? project.property('password') : 'default_password'
+    file = project.hasProperty('file') ? project.property('file') : 'names.csv'
+    batchSize = project.hasProperty('batchSize') ? project.property('batchSize') : '5'
+}
+
 dependencies {
     compile group: 'com.mashape.unirest', name: 'unirest-java', version: '1.4.9'
     compile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '3.4.0'
@@ -17,5 +24,5 @@ dependencies {
 task run(type: JavaExec) {
     main = "com.ch.ser.strava.Main"
     classpath = sourceSets.main.runtimeClasspath
-    args = ["$user", "$password", "$file"]
+    args = ["$user", "$password", "$file", "$batchSize"]
 }

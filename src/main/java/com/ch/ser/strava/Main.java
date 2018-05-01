@@ -10,8 +10,8 @@ import java.util.stream.Collectors;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        if(args.length != 3) {
-            throw new RuntimeException("Should be provided following arguments: email, password, file name");
+        if(args.length != 4) {
+            throw new RuntimeException("Should be provided following arguments: email, password, file name, batch size");
         }
 
         Logger.getLogger("com.gargoylesoftware").setLevel(Level.OFF);
@@ -22,7 +22,7 @@ public class Main {
 
         final List<Athlete> athletes = membersLoader.load();
 
-        final MileageLoader mileageLoader = new MileageLoader(args[0], args[1]);
+        final MileageLoader mileageLoader = new MileageLoader(args[0], args[1], args[3]);
         mileageLoader.loadMileage(athletes);
         athletes.forEach(System.out::println);
 
