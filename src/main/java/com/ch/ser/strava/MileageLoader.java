@@ -16,12 +16,14 @@ public class MileageLoader {
     private final String user;
     private final String password;
     private final int batchSize;
+    private final long pause;
 
 
-    public MileageLoader(String user, String password, String batchStr) {
+    public MileageLoader(String user, String password, String batchStr, String pauseStr) {
         this.user = user;
         this.password = password;
         this.batchSize = Integer.parseInt(batchStr);
+        this.pause = Long.parseLong(pauseStr);
     }
 
     public void loadMileage(List<Athlete> athletes) {
@@ -62,7 +64,7 @@ public class MileageLoader {
 //        new WebDriverWait(webDriver, 10).until((ExpectedCondition<Boolean>) driver ->
 //                (Boolean) ((JavascriptExecutor) driver).executeScript("return (window.jQuery != null) && (jQuery.active === 0);"));
         try {
-            Thread.sleep(2000);
+            Thread.sleep(pause);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
