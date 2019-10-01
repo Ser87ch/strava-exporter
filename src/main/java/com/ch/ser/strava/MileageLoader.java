@@ -1,8 +1,7 @@
 package com.ch.ser.strava;
 
 import org.openqa.selenium.*;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
-import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.IOException;
@@ -61,18 +60,13 @@ public class MileageLoader {
     private String loadAthleteMileage(int id, WebDriver webDriver) {
         webDriver.get(String.format("https://www.strava.com/athletes/%d", id));
 
-//        new WebDriverWait(webDriver, 10).until((ExpectedCondition<Boolean>) driver ->
-//                (Boolean) ((JavascriptExecutor) driver).executeScript("return (window.jQuery != null) && (jQuery.active === 0);"));
         try {
-            Thread.sleep(pause);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            final WebElement element = webDriver.findElement(By.xpath("//tbody[@id = 'running-ytd']//tr[1]//td[2]"));
+            final WebDriverWait webDriverWait = new WebDriverWait(webDriver, pause, 200);
+            final WebElement element = webDriverWait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//tbody[@id = 'running-ytd']//tr[1]//td[2]")));
             return element.getAttribute("innerHTML");
-        } catch (NoSuchElementException e) {
+        } catch (TimeoutException | NoSuchElementException e) {
             try {
                 final byte[] pageSourceBytes = webDriver.getPageSource().getBytes();
                 final String fileName = "user" + id + ".html";

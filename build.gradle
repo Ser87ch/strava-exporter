@@ -14,7 +14,7 @@ ext {
     password = project.hasProperty('password') ? project.property('password') : 'default_password'
     file = project.hasProperty('file') ? project.property('file') : 'names.csv'
     batchSize = project.hasProperty('batchSize') ? project.property('batchSize') : '5'
-    pause = project.hasProperty('pause') ? project.property('pause') : '4000'
+    pause = project.hasProperty('pause') ? project.property('pause') : '10'
 }
 
 dependencies {
