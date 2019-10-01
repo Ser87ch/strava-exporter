@@ -10,19 +10,17 @@ import java.util.stream.Collectors;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        if (args.length != 5) {
-            throw new RuntimeException("Should be provided following arguments: email, password, file name, batch size, pause");
+        if (args.length != 4) {
+            throw new RuntimeException("Should be provided following arguments: email, password, file name, pause");
         }
 
         Logger.getLogger("com.gargoylesoftware").setLevel(Level.OFF);
         Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(Level.OFF);
-//        final String publicToken = args.length == 4 ? args[3] : "62ee9e8b017042d482ed933930c6b4b5b58e9280";
-        final MembersLoader membersLoader = new MembersCsvLoader(args[2]);
-//        final MembersLoader membersLoader = new MembersApiLoader(args[0], publicToken);
 
+        final MembersLoader membersLoader = new MembersCsvLoader(args[2]);
         final List<Athlete> athletes = membersLoader.load();
 
-        final MileageLoader mileageLoader = new MileageLoader(args[0], args[1], args[3], args[4]);
+        final MileageLoader mileageLoader = new MileageLoader(args[0], args[1], args[3]);
         mileageLoader.loadMileage(athletes);
         athletes.forEach(System.out::println);
 

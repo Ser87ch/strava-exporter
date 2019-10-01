@@ -1,6 +1,8 @@
 package com.ch.ser.strava;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.*;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -14,23 +16,19 @@ public class MileageLoader {
 
     private final String user;
     private final String password;
-    private final int batchSize;
     private final long pause;
 
 
-    public MileageLoader(String user, String password, String batchStr, String pauseStr) {
+    public MileageLoader(String user, String password, String pauseStr) {
         this.user = user;
         this.password = password;
-        this.batchSize = Integer.parseInt(batchStr);
         this.pause = Long.parseLong(pauseStr);
     }
 
     public void loadMileage(List<Athlete> athletes) {
-        WebDriver webDriver = null;
+        WebDriver webDriver = getWebDriver();
+        ;
         for (int i = 0; i < athletes.size(); i++) {
-            if (i % batchSize == 0) {
-                webDriver = getWebDriver();
-            }
             final Athlete athlete = athletes.get(i);
             System.out.println("Loading " + athlete.getFirstName() + " " + athlete.getSecondName());
             athlete.setMileage(loadAthleteMileage(athlete.getId(), webDriver).replace(",", ""));
@@ -39,8 +37,9 @@ public class MileageLoader {
     }
 
     private WebDriver getWebDriver() {
-        final WebDriver webDriver = new MyDriver();
-        webDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        WebDriverManager.chromedriver().setup();
+        final WebDriver webDriver = new ChromeDriver();
+        webDriver.manage().timeouts().implicitlyWait(pause, TimeUnit.SECONDS);
         System.out.println("logging");
         webDriver.get("https://www.strava.com/login");
 
@@ -59,14 +58,21 @@ public class MileageLoader {
 
     private String loadAthleteMileage(int id, WebDriver webDriver) {
         webDriver.get(String.format("https://www.strava.com/athletes/%d", id));
+        return extractMileage(id, webDriver, true);
+    }
 
+    private String extractMileage(int id, WebDriver webDriver, boolean firstTime) {
+        final WebDriverWait webDriverWait = new WebDriverWait(webDriver, pause, 200);
         try {
-            final WebDriverWait webDriverWait = new WebDriverWait(webDriver, pause, 200);
             final WebElement element = webDriverWait.until(
                     ExpectedConditions.elementToBeClickable(
                             By.xpath("//tbody[@id = 'running-ytd']//tr[1]//td[2]")));
             return element.getAttribute("innerHTML");
         } catch (TimeoutException | NoSuchElementException e) {
+            if (firstTime) {
+                clickRunning(webDriverWait);
+                return extractMileage(id, webDriver, false);
+            }
             try {
                 final byte[] pageSourceBytes = webDriver.getPageSource().getBytes();
                 final String fileName = "user" + id + ".html";
@@ -75,6 +81,14 @@ public class MileageLoader {
                 e1.printStackTrace();
             }
             return "Mileage not found";
+        }
+    }
+
+    private void clickRunning(WebDriverWait webDriverWait) {
+        try {
+            webDriverWait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@title='Running']"))).click();
+        } catch (TimeoutException | NoSuchElementException e) {
+            e.printStackTrace();
         }
     }
 }

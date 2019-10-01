@@ -13,17 +13,18 @@ ext {
     user = project.hasProperty('user') ? project.property('user') : 'default_user'
     password = project.hasProperty('password') ? project.property('password') : 'default_password'
     file = project.hasProperty('file') ? project.property('file') : 'names.csv'
-    batchSize = project.hasProperty('batchSize') ? project.property('batchSize') : '5'
-    pause = project.hasProperty('pause') ? project.property('pause') : '10'
+    pause = project.hasProperty('pause') ? project.property('pause') : '5'
 }
 
 dependencies {
     compile group: 'com.mashape.unirest', name: 'unirest-java', version: '1.4.9'
     compile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '3.5.1'
+    compile group: 'org.seleniumhq.selenium', name: 'selenium-chrome-driver', version: '3.141.59'
+    compile group: 'io.github.bonigarcia', name: 'webdrivermanager', version: '3.7.1'
 }
 
 task run(type: JavaExec) {
     main = "com.ch.ser.strava.Main"
     classpath = sourceSets.main.runtimeClasspath
-    args = ["$user", "$password", "$file", "$batchSize", "$pause"]
+    args = ["$user", "$password", "$file", "$pause"]
 }
