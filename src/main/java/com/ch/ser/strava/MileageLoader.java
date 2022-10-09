@@ -66,7 +66,7 @@ public class MileageLoader {
         try {
             final WebElement element = webDriverWait.until(
                     ExpectedConditions.elementToBeClickable(
-                            By.xpath("//tbody[@id = 'running-ytd']//tr[1]//td[2]")));
+                            By.xpath("//tbody[@id = 'sport-1-ytd']//tr[2]//td[2]")));
             return element.getAttribute("innerHTML");
         } catch (TimeoutException | NoSuchElementException e) {
             if (firstTime) {
@@ -86,7 +86,7 @@ public class MileageLoader {
 
     private void clickRunning(WebDriverWait webDriverWait) {
         try {
-            webDriverWait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@title='Running']"))).click();
+            webDriverWait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@title='Run']"))).click();
         } catch (TimeoutException | NoSuchElementException e) {
             e.printStackTrace();
         }
